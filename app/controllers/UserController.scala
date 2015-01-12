@@ -37,8 +37,11 @@ trait UserController extends Controller{
   }
   
   def deleteUser(id : Long) = Action {
-    val user = Option(users.get(id))
-    users.remove(id);
-    NoContent
+    if(Option(users.get(id)).isDefined){
+      users.remove(id)
+      NoContent
+    } else {
+      NotFound
+    }
   }
 }

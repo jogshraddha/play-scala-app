@@ -11,7 +11,6 @@ class UserControllerSpec extends Specification {
     }
 
     "create new user" in new WithApplication{
-      var reqParams= "{\"name\": \"John\"}".getBytes()
       val users = route(FakeRequest(POST, "/create")
         .withHeaders(CONTENT_TYPE -> "application/json")
         .withJsonBody(Json.parse("""{ "name": "abc" }"""))
@@ -19,14 +18,31 @@ class UserControllerSpec extends Specification {
       status(users) must equalTo(OK)
     }
 
+    "return a bad request if wrong parameters are passed" in new WithApplication() {
+      val users = route(FakeRequest(POST, "/create")
+        .withHeaders(CONTENT_TYPE -> "application/json")
+      ).get
+      status(users) must equalTo(BAD_REQUEST)
+    }
+
     "find a user" in new WithApplication{
       val users = route(FakeRequest(GET, "/users/1")).get
       status(users) must equalTo(OK)
     }
 
+    "return not found if user with specified ID does not exist" in new WithApplication{
+      val users = route(FakeRequest(GET, "/users/3")).get
+      status(users) must equalTo(NOT_FOUND)
+    }
+
     "delete a user" in new WithApplication{
       val users = route(FakeRequest(DELETE, "/users/1")).get
       status(users) must equalTo(NO_CONTENT)
+    }
+
+    "return not found if user with specified ID does not exist" in new WithApplication{
+      val users = route(FakeRequest(DELETE, "/users/3")).get
+      status(users) must equalTo(NOT_FOUND)
     }
   }
 
