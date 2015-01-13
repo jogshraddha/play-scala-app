@@ -4,10 +4,12 @@
 
 # Home page
 GET     /                           controllers.Application.index
+POST    /register                   controllers.Application.register
 GET     /users                      controllers.Application.getUsers
 POST	/create						controllers.Application.createUser
 GET     /users/:id                  controllers.Application.findUserById(id: Long)
-DELETE     /users/:id                  controllers.Application.deleteUser(id: Long)
+DELETE  /users/:id                  controllers.Application.deleteUser(id: Long)
+PUT /update/:name                   controllers.Application.update(name: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
